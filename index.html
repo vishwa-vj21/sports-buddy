@@ -2,15 +2,108 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Sports Buddy</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Web Design Mastery | Explore Destinations</title>
   </head>
   <body>
-    <h1>🏀 Welcome to Sports Buddy</h1>
-    <a href="user/login.html">Login</a> |
-    <a href="user/register.html">Register</a> |
-    <a href="admin/admin.html">Admin Panel</a>
-
-    <script src="app.js" type="module"></script>
+    <div class="container">
+      <nav>
+        <div class="nav__logo" style="color: white">
+          <h2 class="link"><a href="#">SPORTS<span> BUDDY</span></a></h2>
+        </div>
+        <ul class="nav__links">
+          <li class="link"><a href="#">Home</a></li>
+          <li class="link"><a href="/user/register.html">Register</a></li>
+          <li class="link"><a href="/user/login.html">Login</a></li>
+          <li class="link"><a href="/user/dashboard.html">Admin Panel</a></li>
+        </ul>
+        <div class="search">
+          <input type="text" placeholder="Search sports or events" />
+          <span><i class="ri-search-line"></i></span>
+        </div>
+        <div class="login">
+          <span><i class="ri-user-3-fill"></i></span>
+          Log In
+        </div>
+      </nav>
+      <div class="destination__container">
+        
+        
+        <div class="content">
+          <h1>FIND YOUR<br />SPORTS<br /><span>BUDDY</span></h1>
+          <p>
+            Connect with players around you, join local sports events, and build
+            meaningful friendships through sports.
+          </p>
+          <a href="user/register.html"
+            ><button class="btn">Get Started</button></a
+          >
+        </div>
+        <div class="destination__grid">
+          <div class="destination__card">
+            <img src="assets/sports-1.jpg" alt="football" />
+            <div class="card__content">
+              <h4>Football Matches</h4>
+              <p>
+                Join local football games near you and find players at your
+                skill level.
+              </p>
+            </div>
+          </div>
+          <div class="destination__card">
+            <img src="assets/sports-2.jpg" alt="football" />
+            <div class="card__content">
+              <h4>Basketball Matches</h4>
+              <p>
+                Find local basketball players and join pickup games or
+                tournaments.
+              </p>
+            </div>
+          </div>
+          <div class="destination__card">
+            <img src="assets/sports-3.jpg" alt="badminton" />
+            <div class="card__content">
+              <h4>Badminton Tournaments</h4>
+              <p>
+                Meet fellow badminton enthusiasts and participate in
+                tournaments.
+              </p>
+            </div>
+          </div>
+          <div class="destination__card">
+            <img src="assets/sports-4.jpg" alt="cricket" />
+            <div class="card__content">
+              <h4>Cricket Events</h4>
+              <p>
+                Discover cricket matches happening in your area and build your
+                team.
+              </p>
+            </div>
+          </div>
+          <div class="destination__card">
+            <img src="assets/sports-5.jpg" alt="tennis" />
+            <div class="card__content">
+              <h4>Tennis Matches</h4>
+              <p>
+                Connect with tennis players nearby and play singles or doubles.
+              </p>
+            </div>
+        </div>
+          <div class="destination__card">
+            <img src="assets/sports-6.jpg" alt="running" />
+            <div class="card__content">
+              <h4>Swimming Events</h4>
+              <p>
+                Join swimming competitions or meet new friends at your local pool.
+              </p>
+            </div>
+          </div>
+      </div>
+    </div>
   </body>
 </html>
