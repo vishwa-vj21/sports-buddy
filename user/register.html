@@ -18,6 +18,57 @@
       <button type="submit">Register</button>
     </form>
 
-    <script type="module" src="/user/user.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAY7xm7_LV3eeme_ZknpdEvSz6vlUhxWLk",
+        authDomain: "sports-buddy-22af5.firebaseapp.com",
+        projectId: "sports-buddy-22af5",
+        storageBucket: "sports-buddy-22af5.firebasestorage.app",
+        messagingSenderId: "726616315879",
+        appId: "1:726616315879:web:5189748be0b5c577d88f42",
+        measurementId: "G-J166TVZ6DV",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          try {
+            const userCred = await createUserWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+            await setDoc(doc(db, "users", userCred.user.uid), {
+              name,
+              email,
+              createdAt: new Date(),
+            });
+            alert("Registered successfully!");
+            window.location.href = "login.html";
+          } catch (err) {
+            alert(err.message);
+          }
+        });
+    </script>
   </body>
 </html>

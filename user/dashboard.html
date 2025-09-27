@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard - Sports Buddy</title>
+  </head>
+  <body>
+    <h2>Sports Events</h2>
+    <ul id="eventsList"></ul>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      const firebaseConfig = {
+        /* same config */
+      };
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const eventsList = document.getElementById("eventsList");
+
+      async function loadEvents() {
+        const querySnapshot = await getDocs(collection(db, "events"));
+        querySnapshot.forEach((doc) => {
+          const li = document.createElement("li");
+          li.textContent = doc.data().name + " - " + doc.data().city;
+          eventsList.appendChild(li);
+        });
+      }
+
+      loadEvents();
+    </script>
+  </body>
+</html>

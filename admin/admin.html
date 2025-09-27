@@ -2,10 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Admin Panel - Sports Buddy</title>
+    <title>Admin - Sports Buddy</title>
   </head>
   <body>
-    <h2>Admin Panel</h2>
+    <h2>Add Sports Event</h2>
     <form id="eventForm">
       <input
         type="text"
@@ -14,13 +14,41 @@
         required
       /><br />
       <input type="text" id="city" placeholder="City" required /><br />
-      <input type="text" id="area" placeholder="Area" required /><br />
-      <input type="datetime-local" id="dateTime" required /><br />
       <button type="submit">Add Event</button>
     </form>
 
-    <ul id="eventList"></ul>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    <script type="module" src="admin.js"></script>
+      const firebaseConfig = {
+        /* same config */
+      };
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      document
+        .getElementById("eventForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const eventName = document.getElementById("eventName").value;
+          const city = document.getElementById("city").value;
+
+          try {
+            await addDoc(collection(db, "events"), {
+              name: eventName,
+              city,
+              createdAt: new Date(),
+            });
+            alert("Event added!");
+          } catch (err) {
+            alert(err.message);
+          }
+        });
+    </script>
   </body>
 </html>

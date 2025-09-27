@@ -17,6 +17,34 @@
       <button type="submit">Login</button>
     </form>
 
-    <script type="module" src="user.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      const firebaseConfig = {
+        /* same config as register */
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          try {
+            await signInWithEmailAndPassword(auth, email, password);
+            alert("Login successful!");
+            window.location.href = "dashboard.html";
+          } catch (err) {
+            alert(err.message);
+          }
+        });
+    </script>
   </body>
 </html>
