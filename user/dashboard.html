@@ -2,34 +2,219 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Dashboard - Sports Buddy</title>
-  </head>
-  <body>
-    <h2>Sports Events</h2>
-    <ul id="eventsList"></ul>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Sports Buddy</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
 
+      body {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        flex-direction: column;
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        font-size: 28px;
+        text-align: center;
+      }
+
+      .admin-container {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 40px 30px;
+        border-radius: 15px;
+        width: 380px;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+      }
+
+      form input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 8px;
+        outline: none;
+        background: rgba(255, 255, 255, 0.9);
+        font-size: 15px;
+      }
+
+      form input:focus {
+        background: #fff;
+        box-shadow: 0 0 5px #00b4ff;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        outline: none;
+        background: #00b4ff;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 8px;
+        margin-top: 15px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      button:hover {
+        background: #0092d1;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 25px;
+        max-height: 250px;
+        overflow-y: auto;
+        text-align: left;
+      }
+
+      ul li {
+        background: rgba(255, 255, 255, 0.15);
+        margin: 8px 0;
+        padding: 10px 15px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .delete-btn {
+        background: #ff4b4b;
+        border: none;
+        color: white;
+        border-radius: 6px;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: 0.3s;
+      }
+
+      .delete-btn:hover {
+        background: #e03a3a;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+      }
+
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+        margin-left: 15px;
+      }
+
+      .nav-links a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="../user/dashboard.html">User Dashboard</a>
+    </div>
+
+    <div class="admin-container">
+      <h2>Admin Panel</h2>
+      <form id="eventForm">
+        <input type="text" id="eventName" placeholder="Event Name" required />
+        <input type="text" id="city" placeholder="City" required />
+        <button type="submit">Add Event</button>
+      </form>
+
+      <ul id="eventsList"></ul>
+    </div>
+
+    <!-- Firebase Script -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import {
         getFirestore,
         collection,
+        addDoc,
         getDocs,
+        deleteDoc,
+        doc,
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
       const firebaseConfig = {
-        /* same config */
+        apiKey: "AIzaSyAY7xm7_LV3eeme_ZknpdEvSz6vlUhxWLk",
+        authDomain: "sports-buddy-22af5.firebaseapp.com",
+        projectId: "sports-buddy-22af5",
+        storageBucket: "sports-buddy-22af5.firebasestorage.app",
+        messagingSenderId: "726616315879",
+        appId: "1:726616315879:web:5189748be0b5c577d88f42",
+        measurementId: "G-J166TVZ6DV",
       };
+
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
 
+      const eventForm = document.getElementById("eventForm");
       const eventsList = document.getElementById("eventsList");
 
+      // Add new event
+      eventForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const eventName = document.getElementById("eventName").value;
+        const city = document.getElementById("city").value;
+
+        try {
+          await addDoc(collection(db, "events"), {
+            name: eventName,
+            city,
+            createdAt: new Date(),
+          });
+          alert("Event added successfully!");
+          eventForm.reset();
+          loadEvents(); // reload list
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+
+      // Load events
       async function loadEvents() {
+        eventsList.innerHTML = "";
         const querySnapshot = await getDocs(collection(db, "events"));
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach((d) => {
           const li = document.createElement("li");
-          li.textContent = doc.data().name + " - " + doc.data().city;
+          li.innerHTML = `
+            ${d.data().name} - ${d.data().city}
+            <button class="delete-btn" data-id="${d.id}">Delete</button>
+          `;
           eventsList.appendChild(li);
+        });
+
+        // Add delete event listener
+        document.querySelectorAll(".delete-btn").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const id = btn.getAttribute("data-id");
+            try {
+              await deleteDoc(doc(db, "events", id));
+              alert("Event deleted!");
+              loadEvents();
+            } catch (err) {
+              alert(err.message);
+            }
+          });
         });
       }
 
